@@ -1,152 +1,57 @@
-# [Start Bootstrap - Clean Blog Jekyll](https://startbootstrap.com/themes/clean-blog-jekyll/) - Official Jekyll Version
+# ruffle-selfhosted
 
-[Clean Blog Jekyll](https://startbootstrap.com/themes/clean-blog-jekyll/) is a stylish, responsive blog theme for [Bootstrap](https://getbootstrap.com/) created by [Start Bootstrap](https://startbootstrap.com/). This theme features a blog homepage, about page, contact page, and an example post page along with a working contact form powered by [Formspree](https://formspree.io/).
+ruffle-selfhosted is the intended way to get Ruffle onto your website.
 
-This repository holds the official Jekyll version of the Clean Blog theme on Start Bootstrap!
+You may either include it and forget about it, and we will polyfill existing Flash content,
+or use our APIs for custom configurations or more advanced usages of the Ruffle player.
 
-## Preview
+## Using ruffle-selfhosted
 
-[![Clean Blog (Jekyll) Preview](https://startbootstrap.com/assets/img/screenshots/themes/clean-blog-jekyll.png)](http://StartBootstrap.github.io/startbootstrap-clean-blog-jekyll/)
+For more examples and in-depth documentation on how to use Ruffle on your website, please
+[check out our wiki](https://github.com/ruffle-rs/ruffle/wiki/Using-Ruffle#web).
 
-**[View Live Preview](http://StartBootstrap.github.io/startbootstrap-clean-blog-jekyll/)**
+### Host Ruffle
 
-## Installation & Setup
+The `selfhosted` package is configured for websites that do not use bundlers or npm and just want
+to get up and running. If you'd prefer to use Ruffle through npm and a bundler, please 
+[refer to ruffle core](https://github.com/ruffle-rs/ruffle/tree/master/web/packages/core).
 
-### Using RubyGems
+Before you can get started with using Ruffle on your website, you must host its files yourself.
+Either take the [latest build](https://github.com/ruffle-rs/ruffle/releases)
+or [build it yourself](../../README.md), and make these files accessible by your web server.
 
-When installing the theme using RubyGems, demo images, posts, and pages are not included. Follow the instructions below for complete setup.
+Please note that the `.wasm` file must be served properly, and some web servers may not do that
+correctly out of the box. Please see [our wiki](https://github.com/ruffle-rs/ruffle/wiki/Using-Ruffle#configure-wasm-mime-type)
+for instructions on how to configure this, if you encounter a `Incorrect response MIME type` error.
 
-1. (Optional) Create a new Jekyll site: `jekyll new my-site`
-2. Replace the current theme in your `Gemfile` with `gem "jekyll-theme-clean-blog"`.
-3. Install the theme (run the command inside your site directory): `bundle install`
-4. Replace the current theme in your `_config.yml` file with `theme: jekyll-theme-clean-blog`.
-5. Build your site: `bundle exec jekyll serve`
+### "Plug and Play"
 
-Assuming there are no errors and the site is building properly, follow these steps next:
+If you have an existing website with flash content, you can simply include Ruffle as a script and
+our polyfill magic will replace everything for you. No fuss, no mess.
 
-1. Create the following pages if they do not exist already (or change the extension of existing markdown files from `.md` to `.html`):
+```html
+<script src="path/to/ruffle/ruffle.js"></script>
+```
 
-   * `index.html` - set to `layout: home`
-   * `about.html` - set to `layout: page`
-   * `contact.html` - set to `layout: page`
-   * `posts/index.html` - set to `layout: page` (you will also need to create a `posts` directory)
+### Javascript API
 
-2. Configure the `index.html` front matter. Example:
+If you want to control the Ruffle player, you may use our Javascript API.
 
-    ```markdown
-    ---
-    layout: home
-    background: '/PATH_TO_IMAGE'
-    ---
-    ```
+```html
+<script>
+    window.RufflePlayer = window.RufflePlayer || {};
 
-3. Configure the `about.html`, `contact.html`, and `posts/index.html` front matter. Example:
+    window.addEventListener("DOMContentLoaded", () => {
+        let ruffle = window.RufflePlayer.newest();
+        let player = ruffle.createPlayer();
+        let container = document.getElementById("container");
+        container.appendChild(player);
+        player.load("movie.swf");
+    });
+</script>
+<script src="path/to/ruffle/ruffle.js"></script>
+```
 
-    ```markdown
-    ---
-    layout: page
-    title: Page Title
-    description: This is the page description.
-    background: '/PATH_TO_IMAGE'
-    ---
-    ```
+## Building, testing or contributing
 
-4. For each post in the `_posts` directory, update the front matter. Example:
-
-    ```markdown
-    ---
-    layout: post
-    title: "Post Title"
-    subtitle: "This is the post subtitle."
-    date: YYYY-MM-DD HH:MM:SS
-    background: '/PATH_TO_IMAGE'
-    ---
-    ```
-
-    For reference, look at the [demo repository](https://github.com/StartBootstrap/startbootstrap-clean-blog-jekyll) to see how the files are set up.
-
-5. Add the form to the `contact.html` page. Add the following code to your `contact.html` page:
-
-    ```html
-    <form name="sentMessage" id="contactForm" novalidate>
-      <div class="control-group">
-        <div class="form-group floating-label-form-group controls">
-          <label>Name</label>
-          <input type="text" class="form-control" placeholder="Name" id="name" required data-validation-required-message="Please enter your name.">
-          <p class="help-block text-danger"></p>
-        </div>
-      </div>
-      <div class="control-group">
-        <div class="form-group floating-label-form-group controls">
-          <label>Email Address</label>
-          <input type="email" class="form-control" placeholder="Email Address" id="email" required data-validation-required-message="Please enter your email address.">
-          <p class="help-block text-danger"></p>
-        </div>
-      </div>
-      <div class="control-group">
-        <div class="form-group col-xs-12 floating-label-form-group controls">
-          <label>Phone Number</label>
-          <input type="tel" class="form-control" placeholder="Phone Number" id="phone" required data-validation-required-message="Please enter your phone number.">
-          <p class="help-block text-danger"></p>
-        </div>
-      </div>
-      <div class="control-group">
-        <div class="form-group floating-label-form-group controls">
-          <label>Message</label>
-          <textarea rows="5" class="form-control" placeholder="Message" id="message" required data-validation-required-message="Please enter a message."></textarea>
-          <p class="help-block text-danger"></p>
-        </div>
-      </div>
-      <br>
-      <div id="success"></div>
-      <div class="form-group">
-        <button type="submit" class="btn btn-primary" id="sendMessageButton">Send</button>
-      </div>
-    </form>
-    ```
-
-    Make sure you have the `email` setting in your `_config.yml` file set to a working email address! Once this is set, fill out the form and then check your email, verify the email address using the link sent to you by Formspree, and then the form will be working!
-
-6. Build your site: `bundle exec jekyll serve`
-
-### Using Core Files
-
-When using the core files, the demo images, posts, and pages are all included with the download. After following the instructions below, you can then go and change the content of the pages and posts.
-
-1. [Download](https://github.com/StartBootstrap/startbootstrap-clean-blog-jekyll/archive/master.zip) or Clone the repository.
-2. Update the following configuration settings in your `_config.yml` file:
-   - `baseurl`
-   - `url`
-   - `title`
-   - `email` (after setting this setting to a working email address, fill out the form on the contact page and send it - then check your email and verify the address and the form will send you messages when used)
-   - `description`
-   - `author`
-   - `twitter_username` (Optional)
-   - `facebook_username` (Optional)
-   - `github_username` (Optional)
-   - `linkedin_username` (Optional)
-   - `instagram_username` (Optional)
-3. Build your site: `bundle exec jekyll serve`
-
-## Bugs and Issues
-
-Have a bug or an issue with this template? [Open a new issue](https://github.com/StartBootstrap/startbootstrap-clean-blog-jekyll/issues) here on GitHub!
-
-## About
-
-Start Bootstrap is an open source library of free Bootstrap templates and themes. All of the free templates and themes on Start Bootstrap are released under the MIT license, which means you can use them for any purpose, even for commercial projects.
-
-* <https://startbootstrap.com>
-* <https://twitter.com/SBootstrap>
-
-Start Bootstrap was created by and is maintained by **[David Miller](http://davidmiller.io/)**.
-
-* <http://davidmiller.io>
-* <https://twitter.com/davidmillerskt>
-* <https://github.com/davidtmiller>
-
-Start Bootstrap is based on the [Bootstrap](https://getbootstrap.com/) framework created by [Mark Otto](https://twitter.com/mdo) and [Jacob Thorton](https://twitter.com/fat).
-
-## Copyright and License
-
-Copyright 2013-2020 Start Bootstrap LLC. Code released under the [MIT](https://github.com/StartBootstrap/startbootstrap-clean-blog-jekyll/blob/gh-pages/LICENSE) license.
+Please see [the ruffle-web README](../../README.md).
